@@ -1,6 +1,7 @@
 # ical-splitter
 
-This is a small script that uses the Ruby iCalendar gem to split a large ical
+This is a small script that uses the Ruby
+[iCalendar](https://github.com/icalendar/icalendar) gem to split a large ical
 file into smaller chunks.
 
 ## Why?
@@ -14,7 +15,11 @@ of ics files in it. You'll need to unzip that file before selecting the file(s)
 you wish to import.
 
 ## Usage
-```./split-calendar.sh bigcalendar.ics```
+
+```
+./split-calendar.sh bigcalendar.ics
+```
+
 The shell script does a `bundle check` and `bundle install` if the iCalendar gem
 isn't present. Then it invokes `ical-splitter.rb` on the file. It will then
 write a series of files like `bigcalendar-1.ics`, `bigcalendar-2.ics`, etc which
