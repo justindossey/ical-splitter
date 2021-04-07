@@ -1,10 +1,11 @@
 require 'stringio'
 require 'icalendar'
 
-# split a large calendar file into multiple chunks. Provide input file as
+# split a large calendar file into multiple chunks. Provide input file (ics) as
 # parameter. Output will be written as files "mycalendar-N.ics"
-#
-LIMIT_SIZE = 1024 * 1024 # 1 megabyte
+LIMIT_SIZE = 1024 * 512 # 512 kilobytes
+INPUT_FILE = ARGV[0].freeze
+filename_stub = File.basename(INPUT_FILE, ".ics")
 File.open(ARGV[0]) do |cal_file|
   warn "Reading #{ARGV[0].inspect}"
   cals = Icalendar::Calendar.parse(cal_file)
@@ -17,7 +18,7 @@ File.open(ARGV[0]) do |cal_file|
     break if cur == cal.events.length
     new_cal = Icalendar::Calendar.new
     cur_size = new_cal.to_ical.size
-    new_fn = "mycalendar-#{n}.ics"
+    new_fn = "#{filename_stub}-#{n}.ics"
     cal.events[cur..-1].each_with_index do |event, idx|
       if event.to_ical.size + cur_size < LIMIT_SIZE
         new_cal.add_event(event)
@@ -32,8 +33,3 @@ File.open(ARGV[0]) do |cal_file|
     n += 1
   end
 end
-
-    
-
-
-
