@@ -20,13 +20,11 @@ File.open(ARGV[0]) do |cal_file|
     cur_size = new_cal.to_ical.size
     new_fn = "#{filename_stub}-#{n}.ics"
     cal.events[cur..-1].each_with_index do |event, idx|
-      if event.to_ical.size + cur_size < LIMIT_SIZE
-        new_cal.add_event(event)
-        cur += 1
-        cur_size += event.to_ical.size
-      else
-        break
-      end
+      break unless event.to_ical.size + cur_size < LIMIT_SIZE
+
+      new_cal.add_event(event)
+      cur += 1
+      cur_size += event.to_ical.size
     end
     warn "Writing #{new_fn}"
     File.open(new_fn, "w") {|f| f.write new_cal.to_ical }
